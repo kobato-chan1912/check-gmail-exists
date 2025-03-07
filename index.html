@@ -43,14 +43,17 @@
 
     <div class="row mb-3">
       <div class="col-md-2">
-        <input type="number" min="1" class="form-control" placeholder="Max Mail tạo ra">
+        <label class="form-label" for="maxMail">Max Mail</label>
+        <input id="maxMail" type="number" min="1" class="form-control" placeholder="Max Mail tạo ra">
       </div>
 
       <div class="col-md-2">
+        <label class="form-label" for="threads">Threads</label>
         <input id="threads" type="number" min="1" class="form-control" placeholder="Threads">
       </div>
 
-      <div class="col-md-8">
+      <div class="col-md-8" style="    margin-top: 2rem;">
+       
         <button class="btn btn-success" onclick="createMail()">Tạo random</button>
         <button id="checkMailBtn" class="btn btn-primary" onclick="checkMail()">Check mail</button>
         <button id="stopNow" class="btn btn-danger" style="display: none;" onclick="stopNow()">Stop</button>
