@@ -93,6 +93,7 @@ async function checkMail() {
 
     $("#live").val(validEmails.join("\n"));
     checkButton.prop("disabled", false).html(originalText);
+    $("#stopNow").hide(); // 
 
 }
 
