@@ -17,7 +17,7 @@ async function selectOutput(defaultName) {
 function createMail() {
     let firstNames = $("#firstName").val().split("\n").filter(name => name.trim() !== "");
     let lastNames = $("#lastName").val().split("\n").filter(name => name.trim() !== "");
-    let maxMails = parseInt($("#maxMail]").val()) || 10;
+    let maxMails = parseInt($("#maxMail").val()) || 10;
     
     let generatedMails = [];
     
