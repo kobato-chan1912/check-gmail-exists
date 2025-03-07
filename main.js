@@ -7,7 +7,7 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
-    height: 500,
+    height: 550,
     webPreferences: {
       nodeIntegration: true, // Cho phép sử dụng require trong renderer process
       contextIsolation: false, // Cho phép sử dụng require trong renderer process
