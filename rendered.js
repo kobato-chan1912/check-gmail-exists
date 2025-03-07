@@ -34,6 +34,13 @@ function createMail() {
         }
     }
 
+    // Shuffle Array 
+    for (let i = generatedMails.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [generatedMails[i], generatedMails[j]] = [generatedMails[j], generatedMails[i]];
+    }
+
+
     $("#random").val(generatedMails.join("\n"));
 }
 
@@ -79,6 +86,7 @@ async function checkMail() {
             let [firstName, lastName] = email.replace("@gmail.com", "").split(/(?=[A-Z])/);
             let emailString = `${firstName},${lastName},${email.toLowerCase()}`;
             validEmails.push(emailString);
+            $("#live").val(validEmails.join("\n"));
         }
     }));
 
@@ -91,7 +99,7 @@ async function checkMail() {
         alert("Không có email nào hợp lệ!");
     }
 
-    $("#live").val(validEmails.join("\n"));
+    
     checkButton.prop("disabled", false).html(originalText);
     $("#stopNow").hide(); // 
 
