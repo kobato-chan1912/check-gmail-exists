@@ -8,46 +8,46 @@ const { ipcRenderer, webUtils } = require('electron');
 async function selectOutput(defaultName) {
     const filePath = await ipcRenderer.invoke('dialog:saveFile', defaultName);
     if (filePath) {
-      return filePath
+        return filePath
     } else {
-      return null
+        return null
     }
-  }
+}
 
 function createMail() {
     let firstNames = $("#firstName").val().split("\n").filter(name => name.trim() !== "");
     let lastNames = $("#lastName").val().split("\n").filter(name => name.trim() !== "");
     let maxMails = parseInt($("#maxMail").val()) || 10;
-    
-    let generatedMails = [];
-    
-    for (let i = 0; i < firstNames.length; i++) {
-        for (let j = 0; j < lastNames.length; j++) {
-            let email = `${firstNames[i].trim()}${lastNames[j].trim()}@gmail.com`;
-            generatedMails.push(email);
-            if (generatedMails.length >= maxMails) {
-                break;
-            }
-        }
-        if (generatedMails.length >= maxMails) {
-            break;
+
+    let allPossibleEmails = [];
+
+    // Tạo tất cả kết hợp có thể
+    for (let firstName of firstNames) {
+        for (let lastName of lastNames) {
+            allPossibleEmails.push(`${firstName}${lastName}@gmail.com`);
         }
     }
 
-    // Shuffle Array 
-    for (let i = generatedMails.length - 1; i > 0; i--) {
+    // Tránh trường hợp maxMails lớn hơn số email có thể tạo ra
+    maxMails = Math.min(maxMails, allPossibleEmails.length);
+
+    // Xáo trộn mảng bằng Fisher-Yates Shuffle
+    for (let i = allPossibleEmails.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        [generatedMails[i], generatedMails[j]] = [generatedMails[j], generatedMails[i]];
+        [allPossibleEmails[i], allPossibleEmails[j]] = [allPossibleEmails[j], allPossibleEmails[i]];
     }
 
+    // Chọn ra số lượng email yêu cầu
+    let generatedMails = allPossibleEmails.slice(0, maxMails);
 
     $("#random").val(generatedMails.join("\n"));
 }
 
 
+
 async function checkMail() {
 
-  
+
 
     let emails = $("#random").val().split("\n").filter(email => email.trim() !== "");
 
@@ -59,13 +59,13 @@ async function checkMail() {
     let fileName = "output.txt";
     let savePath = await selectOutput(fileName)
     if (savePath == null) {
-      alert("Vui lòng chọn nơi lưu file txt!")
-      return;
+        alert("Vui lòng chọn nơi lưu file txt!")
+        return;
     }
 
 
     let checkButton = $("#checkMailBtn");
-    let originalText = checkButton.html(); 
+    let originalText = checkButton.html();
     checkButton.prop("disabled", true).html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang kiểm tra...`);
 
 
@@ -73,7 +73,7 @@ async function checkMail() {
 
 
     let threadCount = parseInt($("#threads").val()) || 1;
-    isChecking = true; 
+    isChecking = true;
     $("#stopNow").show();
 
     let limit = pLimit(threadCount);
@@ -99,7 +99,7 @@ async function checkMail() {
         alert("Không có email nào hợp lệ!");
     }
 
-    
+
     checkButton.prop("disabled", false).html(originalText);
     $("#stopNow").hide(); // 
 
