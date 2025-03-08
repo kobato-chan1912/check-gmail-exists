@@ -5,6 +5,7 @@ const path = require("path");
 const pLimit = require("p-limit");
 const { ipcRenderer, webUtils } = require('electron');
 const os = require('os');
+const validator = require("deep-email-validator")
 
 $(document).ready(function () {
     // Định nghĩa đường dẫn file
@@ -115,7 +116,8 @@ async function checkMail() {
     const tasks = emails.map(email => limit(async () => {
         if (!isChecking) return; // Kiểm tra nếu bị dừng thì bỏ qua email này
 
-        let isValid = await checkMailModule.checkGmailExists(email);
+        let isValidCheck = await validator.validate(email);
+        let isValid = isValidCheck.valid;
         let [firstName, lastName] = email.replace("@gmail.com", "").split(/(?=[A-Z])/);
         let emailString = `${firstName},${lastName},${email.toLowerCase()}`;
 

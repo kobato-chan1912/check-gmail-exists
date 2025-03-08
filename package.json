@@ -6,9 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "deep-email-validator": "^0.1.21",
     "jquery": "^3.7.1",
-    "p-limit": "^3.1.0",
-    "puppeteer": "^24.4.0"
+    "p-limit": "^3.1.0"
   },
   "devDependencies": {
     "electron": "^35.0.0"
