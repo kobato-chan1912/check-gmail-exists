@@ -1,5 +1,4 @@
 const $ = require('jquery')
-const checkMailModule = require("./check.js")
 const fs = require("fs");
 const path = require("path");
 const pLimit = require("p-limit");
