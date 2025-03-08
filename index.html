@@ -12,7 +12,15 @@
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <style>
+    #live {
+      color: green;
+    }
 
+    #not_live{
+      color: red
+    }
+  </style>
 </head>
 
 <body>
@@ -30,14 +38,19 @@
         <label class="form-label" for="lastName">LastName</label>
         <textarea class="form-control" rows="10" id="lastName"></textarea>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label class="form-label" for="random">Random</label>
         <textarea class="form-control" rows="10" id="random" disabled></textarea>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-3">
         <label class="form-label" for="live">Live</label>
         <textarea class="form-control" rows="10" id="live" disabled></textarea>
       </div>
+      <div class="col-md-3">
+        <label class="form-label" for="not_live">Not Live</label>
+        <textarea class="form-control" rows="10" id="not_live" disabled></textarea>
+      </div>
+      
      
     </div>
 

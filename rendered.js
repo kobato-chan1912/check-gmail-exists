@@ -15,8 +15,15 @@ async function selectOutput(defaultName) {
 }
 
 function createMail() {
-    let firstNames = $("#firstName").val().split("\n").filter(name => name.trim() !== "");
-    let lastNames = $("#lastName").val().split("\n").filter(name => name.trim() !== "");
+    let firstNames = $("#firstName").val().split("\n")
+        .map(name => name.trim().replace(/\b\w/g, c => c.toUpperCase()))
+        .filter(name => name !== "");
+
+    let lastNames = $("#lastName").val().split("\n")
+        .map(name => name.trim().replace(/\b\w/g, c => c.toUpperCase()))
+        .filter(name => name !== "");
+
+
     let maxMails = parseInt($("#maxMail").val()) || 10;
 
     let allPossibleEmails = [];
@@ -70,6 +77,7 @@ async function checkMail() {
 
 
     let validEmails = [];
+    let notLiveEmails = [];
 
 
     let threadCount = parseInt($("#threads").val()) || 1;
@@ -82,11 +90,15 @@ async function checkMail() {
         if (!isChecking) return; // Kiểm tra nếu bị dừng thì bỏ qua email này
 
         let isValid = await checkMailModule.checkGmailExists(email);
+        let [firstName, lastName] = email.replace("@gmail.com", "").split(/(?=[A-Z])/);
+        let emailString = `${firstName},${lastName},${email.toLowerCase()}`;
+
         if (isValid) {
-            let [firstName, lastName] = email.replace("@gmail.com", "").split(/(?=[A-Z])/);
-            let emailString = `${firstName},${lastName},${email.toLowerCase()}`;
             validEmails.push(emailString);
             $("#live").val(validEmails.join("\n"));
+        } else {
+            notLiveEmails.push(emailString);
+            $("#not_live").val(validEmails.join("\n"));
         }
     }));
 
