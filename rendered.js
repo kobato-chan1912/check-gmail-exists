@@ -123,9 +123,11 @@ async function checkMail() {
         if (isValid) {
             validEmails.push(emailString);
             $("#live").val(validEmails.join("\n"));
+            $("#live_count").html(validEmails.length)
         } else {
             notLiveEmails.push(emailString);
             $("#not_live").val(notLiveEmails.join("\n"));
+            $("#not_live_count").html(validEmails.length)
         }
     }));
 
