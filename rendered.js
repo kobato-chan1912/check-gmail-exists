@@ -8,8 +8,8 @@ const os = require('os');
 
 $(document).ready(function () {
     // Định nghĩa đường dẫn file
-    const firstNamePath = path.join(__dirname, "file_ho_ten", "FirstName.txt");
-    const lastNamePath = path.join(__dirname, "file_ho_ten" , "LastName.txt");
+    const firstNamePath = path.join( "file_ho_ten", "FirstName.txt");
+    const lastNamePath = path.join( "file_ho_ten" , "LastName.txt");
 
     // Đọc FirstName.txt
     fs.readFile(firstNamePath, "utf8", (err, data) => {
@@ -32,15 +32,6 @@ $(document).ready(function () {
 
 
 
-function checkChromePath() {
-    const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-
-    if (!fs.existsSync(chromePath)) {
-        alert("Chrome chưa được cài đặt! Vui lòng cài đặt Google Chrome trước.");
-    } else {
-        console.log("Chrome đã được cài đặt.");
-    }
-}
 
 
 
@@ -88,14 +79,7 @@ function createMail() {
 
 async function checkMail() {
 
-
-     if (os.platform() === 'win32' && !checkChromePath()) {
-
-        alert("Vui lòng cài Google Chrome trước!");
-        return;
-
-     }
-
+    
 
 
     let emails = $("#random").val().split("\n").filter(email => email.trim() !== "");

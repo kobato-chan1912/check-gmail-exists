@@ -11,9 +11,13 @@ async function checkGmailExists(email) {
             '--window-size=1200,800',
         ],
     };
+
+
+    
     if (os.platform() === 'win32') {
-        browserOptions.executablePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+        browserOptions.executablePath = path.join(__dirname, 'chrome', 'chrome.exe');
     }
+
 
     const browser = await puppeteer.launch(browserOptions);
         const page = await browser.newPage();
