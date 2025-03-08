@@ -1,8 +1,47 @@
 const $ = require('jquery')
 const checkMailModule = require("./check.js")
 const fs = require("fs");
+const path = require("path");
 const pLimit = require("p-limit");
 const { ipcRenderer, webUtils } = require('electron');
+const os = require('os');
+
+$(document).ready(function () {
+    // Định nghĩa đường dẫn file
+    const firstNamePath = path.join(__dirname, "file_ho_ten", "FirstName.txt");
+    const lastNamePath = path.join(__dirname, "file_ho_ten" , "LastName.txt");
+
+    // Đọc FirstName.txt
+    fs.readFile(firstNamePath, "utf8", (err, data) => {
+        if (!err) {
+            $("#firstName").val(data.trim());
+        } else {
+            console.error("Không thể đọc FirstName.txt", err);
+        }
+    });
+
+    // Đọc LastName.txt
+    fs.readFile(lastNamePath, "utf8", (err, data) => {
+        if (!err) {
+            $("#lastName").val(data.trim());
+        } else {
+            console.error("Không thể đọc LastName.txt", err);
+        }
+    });
+});
+
+
+
+function checkChromePath() {
+    const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+    if (!fs.existsSync(chromePath)) {
+        alert("Chrome chưa được cài đặt! Vui lòng cài đặt Google Chrome trước.");
+    } else {
+        console.log("Chrome đã được cài đặt.");
+    }
+}
+
 
 
 async function selectOutput(defaultName) {
@@ -16,43 +55,46 @@ async function selectOutput(defaultName) {
 
 function createMail() {
     let firstNames = $("#firstName").val().split("\n")
-        .map(name => name.trim().replace(/\b\w/g, c => c.toUpperCase()))
+        .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
         .filter(name => name !== "");
 
     let lastNames = $("#lastName").val().split("\n")
-        .map(name => name.trim().replace(/\b\w/g, c => c.toUpperCase()))
+        .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
         .filter(name => name !== "");
-
 
     let maxMails = parseInt($("#maxMail").val()) || 10;
 
-    let allPossibleEmails = [];
-
-    // Tạo tất cả kết hợp có thể
-    for (let firstName of firstNames) {
-        for (let lastName of lastNames) {
-            allPossibleEmails.push(`${firstName}${lastName}@gmail.com`);
-        }
+    if (firstNames.length === 0 || lastNames.length === 0) {
+        alert("Danh sách họ hoặc tên không được để trống!");
+        return;
     }
 
-    // Tránh trường hợp maxMails lớn hơn số email có thể tạo ra
-    maxMails = Math.min(maxMails, allPossibleEmails.length);
+    let generatedMails = new Set();
 
-    // Xáo trộn mảng bằng Fisher-Yates Shuffle
-    for (let i = allPossibleEmails.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [allPossibleEmails[i], allPossibleEmails[j]] = [allPossibleEmails[j], allPossibleEmails[i]];
+    while (generatedMails.size < maxMails) {
+        let randomFirst = firstNames[Math.floor(Math.random() * firstNames.length)];
+        let randomLast = lastNames[Math.floor(Math.random() * lastNames.length)];
+
+        let email = `${randomFirst}${randomLast}@gmail.com`;
+
+        generatedMails.add(email);
     }
 
-    // Chọn ra số lượng email yêu cầu
-    let generatedMails = allPossibleEmails.slice(0, maxMails);
-
-    $("#random").val(generatedMails.join("\n"));
+    $("#random").val([...generatedMails].join("\n"));
 }
 
 
 
+
 async function checkMail() {
+
+
+     if (os.platform() === 'win32' && !checkChromePath()) {
+
+        alert("Vui lòng cài Google Chrome trước!");
+        return;
+
+     }
 
 
 
