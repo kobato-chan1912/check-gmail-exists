@@ -124,7 +124,7 @@ async function checkMail() {
             $("#live").val(validEmails.join("\n"));
         } else {
             notLiveEmails.push(emailString);
-            $("#not_live").val(emailString.join("\n"));
+            $("#not_live").val(notLiveEmails.join("\n"));
         }
     }));
 
