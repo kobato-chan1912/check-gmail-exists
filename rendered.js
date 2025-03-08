@@ -79,7 +79,7 @@ function createMail() {
 
 async function checkMail() {
 
-    
+    createMail();
 
 
     let emails = $("#random").val().split("\n").filter(email => email.trim() !== "");
