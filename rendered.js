@@ -6,29 +6,9 @@ const { ipcRenderer, webUtils } = require('electron');
 const os = require('os');
 const validator = require("deep-email-validator")
 
-$(document).ready(function () {
-    // Định nghĩa đường dẫn file
-    const firstNamePath = path.join( "file_ho_ten", "FirstName.txt");
-    const lastNamePath = path.join( "file_ho_ten" , "LastName.txt");
 
-    // Đọc FirstName.txt
-    fs.readFile(firstNamePath, "utf8", (err, data) => {
-        if (!err) {
-            $("#firstName").val(data.trim());
-        } else {
-            console.error("Không thể đọc FirstName.txt", err);
-        }
-    });
 
-    // Đọc LastName.txt
-    fs.readFile(lastNamePath, "utf8", (err, data) => {
-        if (!err) {
-            $("#lastName").val(data.trim());
-        } else {
-            console.error("Không thể đọc LastName.txt", err);
-        }
-    });
-});
+
 
 
 
@@ -44,14 +24,39 @@ async function selectOutput(defaultName) {
     }
 }
 
-function createMail() {
-    let firstNames = $("#firstName").val().split("\n")
-        .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
-        .filter(name => name !== "");
 
-    let lastNames = $("#lastName").val().split("\n")
-        .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
-        .filter(name => name !== "");
+let firstNames = [];
+let lastNames = [];
+function readNameFiles() {
+    // Định nghĩa đường dẫn file
+    const firstNamePath = path.join("file_ho_ten", "FirstName.txt");
+    const lastNamePath = path.join("file_ho_ten", "LastName.txt");
+
+    // Kiểm tra file tồn tại trước khi đọc
+    if (fs.existsSync(firstNamePath)) {
+        firstNames = fs.readFileSync(firstNamePath, "utf8")
+            .split("\n")
+            .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
+            .filter(name => name !== "");
+    } else {
+        console.error("Không tìm thấy FirstName.txt");
+        firstNames = [];
+    }
+
+    if (fs.existsSync(lastNamePath)) {
+        lastNames = fs.readFileSync(lastNamePath, "utf8")
+            .split("\n")
+            .map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))
+            .filter(name => name !== "");
+    } else {
+        console.error("Không tìm thấy LastName.txt");
+        lastNames = [];
+    }
+}
+
+function createMail() {
+    
+    readNameFiles()
 
     let maxMails = parseInt($("#maxMail").val()) || 10;
 
@@ -78,6 +83,9 @@ function createMail() {
 
 
 async function checkMail() {
+    let checkButton = $("#checkMailBtn");
+    let originalText = checkButton.html();
+    checkButton.prop("disabled", true).html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang đọc file...`);
 
     createMail();
 
@@ -97,8 +105,8 @@ async function checkMail() {
     }
 
 
-    let checkButton = $("#checkMailBtn");
-    let originalText = checkButton.html();
+    
+   
     checkButton.prop("disabled", true).html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang kiểm tra...`);
 
 
