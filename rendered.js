@@ -10,6 +10,9 @@ const validator = require("deep-email-validator")
 
 
 
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 
 
@@ -55,7 +58,7 @@ function readNameFiles() {
 }
 
 function createMail() {
-    
+
     readNameFiles()
 
     let maxMails = parseInt($("#maxMail").val()) || 10;
@@ -71,7 +74,15 @@ function createMail() {
         let randomFirst = firstNames[Math.floor(Math.random() * firstNames.length)];
         let randomLast = lastNames[Math.floor(Math.random() * lastNames.length)];
 
-        let email = `${randomFirst}${randomLast}@gmail.com`;
+        let startNumber = $("#start_number").val()
+        let endNumber = $("#end_number").val()
+        let randomNumber = ''
+
+        if (startNumber !== '' && endNumber !== '') {
+            randomNumber = randomInteger(parseInt(startNumber), parseInt(endNumber))
+        }
+
+        let email = `${randomFirst}${randomLast}${randomNumber}@gmail.com`;
 
         generatedMails.add(email);
     }
@@ -105,8 +116,8 @@ async function checkMail() {
     }
 
 
-    
-   
+
+
     checkButton.prop("disabled", true).html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang kiểm tra...`);
 
 
