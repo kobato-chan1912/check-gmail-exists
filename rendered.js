@@ -137,8 +137,11 @@ async function checkMail() {
         let isValidCheck = await validator.validate(email);
         let isValid = isValidCheck.valid;
         let [firstName, lastName] = email.replace("@gmail.com", "").split(/(?=[A-Z])/);
-        let emailString = `${firstName},${lastName},${email.toLowerCase()}`;
-        emailString = emailString.replace(/\d+/g, ''); // Loại bỏ tất cả các số
+        
+
+        let nameString = `${firstName},${lastName}`;
+        nameString = nameString.replace(/\d+/g, ''); // Loại bỏ tất cả các số
+        let emailString = `${nameString},${email.toLowerCase()}`;
 
         if (isValid) {
             validEmails.push(emailString);
